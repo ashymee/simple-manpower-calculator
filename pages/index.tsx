@@ -1,82 +1,319 @@
 import Head from 'next/head'
+import { useState } from 'react'
 
-export default function Home() {
+const forms = ['Manpower', 'Output', 'Standard Time', 'Working Time']
+
+const Home = () => {
+  const [manpower, setManpower] = useState(0)
+  const [standardTime, setStandardTime] = useState(0)
+  const [workingTime, setWorkingTime] = useState(0)
+  const [output, setOutput] = useState(0)
+  const [result, setResult] = useState(0)
+  const [selectedForm, setSelectedForm] = useState('Manpower')
+
+  const results = (selectedForm: string) => {
+    switch (selectedForm) {
+      case 'Manpower':
+        setResult((Number(standardTime) * Number(output)) / Number(workingTime))
+        break
+      case 'Output':
+        setResult(
+          (Number(workingTime) * Number(manpower)) / Number(standardTime)
+        )
+        break
+      case 'Standard Time':
+        setResult((Number(workingTime) * Number(manpower)) / Number(output))
+        break
+      case 'Working Time':
+        setResult((Number(standardTime) * Number(output)) / Number(manpower))
+        break
+      default:
+        break
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    results(selectedForm)
+  }
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex min-h-screen w-screen items-center justify-center">
       <Head>
-        <title>Create Next App</title>
+        <title>Simple Manpower Calculator | AWH</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="Simple Manpower Calculator | Used for to count how many manpower, output, standard time and working time on your workspace."
+        />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+      <main className="glass w-96 rounded-xl border p-2 hover:shadow-2xl">
+        {/* app name */}
+        <div className="mb-5 uppercase">
+          <div className="text-center font-bold">simple manpower</div>
+          <div className="divider">calculator</div>
+        </div>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
+        {/* selected form */}
+        <div className="mb-5 grid grid-cols-2 gap-2 rounded-lg border border-slate-200 p-3">
+          {forms.map((item) => (
+            <div
+              key={item}
+              className={`btn flex cursor-pointer items-center justify-center rounded-lg border-0 p-3 ${
+                selectedForm === item
+                  ? 'bg-blue-700 hover:bg-blue-700'
+                  : 'bg-gray-700 hover:bg-blue-500'
+              }`}
+              onClick={() => {
+                results(item)
+                setSelectedForm(item)
+              }}
+            >
+              <div className="text-center">{item}</div>
+            </div>
+          ))}
+        </div>
 
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
+        {/* manpower form */}
+        {selectedForm === 'Manpower' && (
+          <form
+            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            onSubmit={handleSubmit}
           >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
+            {/* standard time */}
+            <div className="form-control mb-5">
+              <label htmlFor="standardTime" className="label">
+                <span className="label-text">Standard Time</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Standard Time"
+                value={standardTime}
+                onChange={(e) => setStandardTime(+e.target.value)}
+              />
+            </div>
 
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
+            {/* working time */}
+            <div className="form-control mb-5">
+              <label htmlFor="workingTime" className="label">
+                <span className="label-text">Working Time</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Working Time"
+                value={workingTime}
+                onChange={(e) => setWorkingTime(+e.target.value)}
+              />
+            </div>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
+            <div className="flex items-end space-x-2">
+              {/* output */}
+              <div className="form-control flex-1">
+                <label htmlFor="targetOutput" className="label">
+                  <span className="label-text">Output</span>
+                </label>
+                <input
+                  type="text"
+                  className="input-bordered input input-lg"
+                  placeholder="Output"
+                  value={output}
+                  onChange={(e) => setOutput(+e.target.value)}
+                />
+              </div>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
+              {/* submit button */}
+              <button className="btn btn-primary btn-square btn-lg flex-none">
+                =
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* output form */}
+        {selectedForm === 'Output' && (
+          <form
+            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            onSubmit={handleSubmit}
           >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+            {/* standard time */}
+            <div className="form-control mb-5">
+              <label htmlFor="standardTime" className="label">
+                <span className="label-text">Standard Time</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Standard Time"
+                value={standardTime}
+                onChange={(e) => setStandardTime(+e.target.value)}
+              />
+            </div>
+            {/* manpower */}
+            <div className="form-control mb-5">
+              <label htmlFor="manpower" className="label">
+                <span className="label-text">Manpower</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Manpower"
+                value={manpower}
+                onChange={(e) => setManpower(+e.target.value)}
+              />
+            </div>
+            <div className="flex items-end space-x-2">
+              {/* working time */}
+              <div className="form-control flex-1">
+                <label htmlFor="workingTime" className="label">
+                  <span className="label-text">Working Time</span>
+                </label>
+                <input
+                  type="text"
+                  className="input-bordered input input-lg"
+                  placeholder="Working Time"
+                  value={workingTime}
+                  onChange={(e) => setWorkingTime(+e.target.value)}
+                />
+              </div>
+              {/* submit button */}
+              <button className="btn btn-primary btn-square btn-lg flex-none">
+                =
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* standardTime form */}
+        {selectedForm === 'Standard Time' && (
+          <form
+            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            onSubmit={handleSubmit}
+          >
+            {/* manpower */}
+            <div className="form-control mb-5">
+              <label htmlFor="manpower" className="label">
+                <span className="label-text">Manpower</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Manpower"
+                value={manpower}
+                onChange={(e) => setManpower(+e.target.value)}
+              />
+            </div>
+            {/* output */}
+            <div className="form-control mb-5">
+              <label htmlFor="targetOutput" className="label">
+                <span className="label-text">Target Output</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Output"
+                value={output}
+                onChange={(e) => setOutput(+e.target.value)}
+              />
+            </div>
+            <div className="flex items-end space-x-2">
+              {/* working time */}
+              <div className="form-control flex-1">
+                <label htmlFor="workingTime" className="label">
+                  <span className="label-text">Working Time</span>
+                </label>
+                <input
+                  type="text"
+                  className="input-bordered input input-lg"
+                  placeholder="Working Time"
+                  value={workingTime}
+                  onChange={(e) => setWorkingTime(+e.target.value)}
+                />
+              </div>
+              {/* submit button */}
+              <button className="btn btn-primary btn-square btn-lg flex-none">
+                =
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* workingTime form */}
+        {selectedForm === 'Working Time' && (
+          <form
+            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            onSubmit={handleSubmit}
+          >
+            {/* manpower */}
+            <div className="form-control mb-5">
+              <label htmlFor="manpower" className="label">
+                <span className="label-text">Manpower</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Manpower"
+                value={manpower}
+                onChange={(e) => setManpower(+e.target.value)}
+              />
+            </div>
+            {/* output */}
+            <div className="form-control mb-5">
+              <label htmlFor="targetOutput" className="label">
+                <span className="label-text">Target Output</span>
+              </label>
+              <input
+                type="text"
+                className="input-bordered input input-lg"
+                placeholder="Output"
+                value={output}
+                onChange={(e) => setOutput(+e.target.value)}
+              />
+            </div>
+            <div className="flex items-end space-x-2">
+              {/* standard time */}
+              <div className="form-control flex-1">
+                <label htmlFor="standardTime" className="label">
+                  <span className="label-text">Standard Time</span>
+                </label>
+                <input
+                  type="text"
+                  className="input-bordered input input-lg"
+                  placeholder="Standard Time"
+                  value={standardTime}
+                  onChange={(e) => setStandardTime(+e.target.value)}
+                />
+              </div>
+              {/* submit button */}
+              <button className="btn btn-primary btn-square btn-lg flex-none">
+                =
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* result */}
+        <div className="form-control">
+          <div className="divider">
+            {selectedForm === 'Manpower' && 'Manpower Needed'}
+            {selectedForm === 'Output' && 'Output Needed'}
+            {selectedForm === 'Standard Time' && 'Standard Time Needed'}
+            {selectedForm === 'Working Time' && 'Working Time Needed'}
+          </div>
+          <input
+            type="text"
+            className="input-bordered input-primary input input-lg cursor-not-allowed"
+            placeholder="Manpower Needed.."
+            value={result}
+            readOnly
+          />
         </div>
       </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="ml-2 h-4" />
-        </a>
-      </footer>
     </div>
   )
 }
+
+export default Home
