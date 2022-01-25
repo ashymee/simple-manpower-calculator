@@ -82,7 +82,7 @@ const Home = () => {
         />
       </Head>
 
-      <main className="glass w-96 rounded-xl border p-2 hover:shadow-2xl">
+      <main className="glass min-w-min rounded-xl border p-2 md:hover:shadow-2xl">
         {/* app name */}
         <div className="mb-2 uppercase">
           <div className="text-center font-bold">simple manpower</div>
@@ -334,7 +334,7 @@ const Home = () => {
           <input
             type="text"
             className="input-bordered input-primary input input-lg cursor-not-allowed"
-            placeholder={`${selectedForm} results here...`}
+            placeholder={`${selectedForm.toLowerCase()} results...`}
             value={result === 0 ? '' : result.toString()}
             readOnly
           />
