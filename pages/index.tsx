@@ -334,7 +334,7 @@ const Home = () => {
           <input
             type="text"
             className="input-bordered input-primary input input-lg cursor-not-allowed"
-            placeholder="Manpower Needed.."
+            placeholder={`${selectedForm} results here...`}
             value={result === 0 ? '' : result.toString()}
             readOnly
           />
