@@ -12,22 +12,55 @@ const Home = () => {
   const [selectedForm, setSelectedForm] = useState('Manpower')
 
   const results = (selectedForm: string) => {
+    let formula = 0
+
     switch (selectedForm) {
       case 'Manpower':
-        setResult((Number(standardTime) * Number(output)) / Number(workingTime))
+        formula = (output * standardTime) / workingTime
+        if (workingTime === 0) {
+          setResult(0)
+          setManpower(0)
+        } else {
+          setResult(formula)
+          setManpower(formula)
+        }
         break
       case 'Output':
-        setResult(
-          (Number(workingTime) * Number(manpower)) / Number(standardTime)
-        )
+        formula = (workingTime * manpower) / standardTime
+        if (standardTime === 0) {
+          setResult(0)
+          setOutput(0)
+        } else {
+          setResult(formula)
+          setOutput(formula)
+        }
         break
       case 'Standard Time':
-        setResult((Number(workingTime) * Number(manpower)) / Number(output))
+        formula = (workingTime * manpower) / output
+        if (output === 0) {
+          setResult(0)
+          setStandardTime(0)
+        } else {
+          setResult(formula)
+          setStandardTime(formula)
+        }
         break
       case 'Working Time':
-        setResult((Number(standardTime) * Number(output)) / Number(manpower))
+        formula = (output * standardTime) / manpower
+        if (manpower === 0) {
+          setResult(0)
+          setWorkingTime(0)
+        } else {
+          setResult(formula)
+          setWorkingTime(formula)
+        }
         break
       default:
+        setResult(0)
+        setManpower(0)
+        setOutput(0)
+        setStandardTime(0)
+        setWorkingTime(0)
         break
     }
   }
@@ -51,13 +84,13 @@ const Home = () => {
 
       <main className="glass w-96 rounded-xl border p-2 hover:shadow-2xl">
         {/* app name */}
-        <div className="mb-5 uppercase">
+        <div className="mb-2 uppercase">
           <div className="text-center font-bold">simple manpower</div>
           <div className="divider">calculator</div>
         </div>
 
         {/* selected form */}
-        <div className="mb-5 grid grid-cols-2 gap-2 rounded-lg border border-slate-200 p-3">
+        <div className="mb-2 grid grid-cols-2 gap-2 rounded-lg border border-slate-200 p-3">
           {forms.map((item) => (
             <div
               key={item}
@@ -79,11 +112,11 @@ const Home = () => {
         {/* manpower form */}
         {selectedForm === 'Manpower' && (
           <form
-            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            className="mb-2 flex flex-col rounded-lg border border-slate-200 p-3"
             onSubmit={handleSubmit}
           >
             {/* standard time */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="standardTime" className="label">
                 <span className="label-text">Standard Time</span>
               </label>
@@ -91,13 +124,13 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Standard Time"
-                value={standardTime}
+                value={standardTime.toString()}
                 onChange={(e) => setStandardTime(+e.target.value)}
               />
             </div>
 
             {/* working time */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="workingTime" className="label">
                 <span className="label-text">Working Time</span>
               </label>
@@ -105,7 +138,7 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Working Time"
-                value={workingTime}
+                value={workingTime.toString()}
                 onChange={(e) => setWorkingTime(+e.target.value)}
               />
             </div>
@@ -120,7 +153,7 @@ const Home = () => {
                   type="text"
                   className="input-bordered input input-lg"
                   placeholder="Output"
-                  value={output}
+                  value={output.toString()}
                   onChange={(e) => setOutput(+e.target.value)}
                 />
               </div>
@@ -136,11 +169,11 @@ const Home = () => {
         {/* output form */}
         {selectedForm === 'Output' && (
           <form
-            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            className="mb-2 flex flex-col rounded-lg border border-slate-200 p-3"
             onSubmit={handleSubmit}
           >
             {/* standard time */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="standardTime" className="label">
                 <span className="label-text">Standard Time</span>
               </label>
@@ -148,12 +181,12 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Standard Time"
-                value={standardTime}
+                value={standardTime.toString()}
                 onChange={(e) => setStandardTime(+e.target.value)}
               />
             </div>
             {/* manpower */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="manpower" className="label">
                 <span className="label-text">Manpower</span>
               </label>
@@ -161,7 +194,7 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Manpower"
-                value={manpower}
+                value={manpower.toString()}
                 onChange={(e) => setManpower(+e.target.value)}
               />
             </div>
@@ -175,7 +208,7 @@ const Home = () => {
                   type="text"
                   className="input-bordered input input-lg"
                   placeholder="Working Time"
-                  value={workingTime}
+                  value={workingTime.toString()}
                   onChange={(e) => setWorkingTime(+e.target.value)}
                 />
               </div>
@@ -190,11 +223,11 @@ const Home = () => {
         {/* standardTime form */}
         {selectedForm === 'Standard Time' && (
           <form
-            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            className="mb-2 flex flex-col rounded-lg border border-slate-200 p-3"
             onSubmit={handleSubmit}
           >
             {/* manpower */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="manpower" className="label">
                 <span className="label-text">Manpower</span>
               </label>
@@ -202,12 +235,12 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Manpower"
-                value={manpower}
+                value={manpower.toString()}
                 onChange={(e) => setManpower(+e.target.value)}
               />
             </div>
             {/* output */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="targetOutput" className="label">
                 <span className="label-text">Target Output</span>
               </label>
@@ -215,7 +248,7 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Output"
-                value={output}
+                value={output.toString()}
                 onChange={(e) => setOutput(+e.target.value)}
               />
             </div>
@@ -229,7 +262,7 @@ const Home = () => {
                   type="text"
                   className="input-bordered input input-lg"
                   placeholder="Working Time"
-                  value={workingTime}
+                  value={workingTime.toString()}
                   onChange={(e) => setWorkingTime(+e.target.value)}
                 />
               </div>
@@ -244,11 +277,11 @@ const Home = () => {
         {/* workingTime form */}
         {selectedForm === 'Working Time' && (
           <form
-            className="mb-5 flex flex-col rounded-lg border border-slate-200 p-3"
+            className="mb-2 flex flex-col rounded-lg border border-slate-200 p-3"
             onSubmit={handleSubmit}
           >
             {/* manpower */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="manpower" className="label">
                 <span className="label-text">Manpower</span>
               </label>
@@ -256,12 +289,12 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Manpower"
-                value={manpower}
+                value={manpower.toString()}
                 onChange={(e) => setManpower(+e.target.value)}
               />
             </div>
             {/* output */}
-            <div className="form-control mb-5">
+            <div className="form-control mb-2">
               <label htmlFor="targetOutput" className="label">
                 <span className="label-text">Target Output</span>
               </label>
@@ -269,7 +302,7 @@ const Home = () => {
                 type="text"
                 className="input-bordered input input-lg"
                 placeholder="Output"
-                value={output}
+                value={output.toString()}
                 onChange={(e) => setOutput(+e.target.value)}
               />
             </div>
@@ -283,7 +316,7 @@ const Home = () => {
                   type="text"
                   className="input-bordered input input-lg"
                   placeholder="Standard Time"
-                  value={standardTime}
+                  value={standardTime.toString()}
                   onChange={(e) => setStandardTime(+e.target.value)}
                 />
               </div>
@@ -297,17 +330,12 @@ const Home = () => {
 
         {/* result */}
         <div className="form-control">
-          <div className="divider">
-            {selectedForm === 'Manpower' && 'Manpower Needed'}
-            {selectedForm === 'Output' && 'Output Needed'}
-            {selectedForm === 'Standard Time' && 'Standard Time Needed'}
-            {selectedForm === 'Working Time' && 'Working Time Needed'}
-          </div>
+          <div className="divider">{selectedForm} needed</div>
           <input
             type="text"
             className="input-bordered input-primary input input-lg cursor-not-allowed"
             placeholder="Manpower Needed.."
-            value={result}
+            value={result === 0 ? '' : result.toString()}
             readOnly
           />
         </div>
